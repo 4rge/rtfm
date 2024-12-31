@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Man Page Generator</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000000; /* Black background */
+            color: #c0c0c0; /* Light gray foreground color */
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #666666; /* Darker border for contrast */
+            border-radius: 5px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5); /* Slight shadow */
+        }
+        h1, h2, h3 {
+            color: #66ccff; /* Light blue color for headings */
+            margin-top: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            border: 1px solid #666666; /* Matching border color */
+            border-radius: 3px;
+            background-color: #333333; /* Dark background for inputs */
+            color: #c0c0c0; /* Light gray text in inputs */
+        }
+        button {
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #005f7f; /* Standard button color */
+            color: white;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px; 
+        }
+        button:hover {
+            background-color: #004358; /* Darker on hover */
+        }
+        pre {
+            background-color: #1e1e1e; /* Darker gray background for code blocks */
+            padding: 10px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            color: #c0c0c0; /* Light gray for preformatted text */
+        }
+        #conversion-command-output {
+            background-color: #1e1e1e; /* Darker background for command output */
+            font-weight: bold; /* Bold for emphasis */
+        }
+    </style>
+</head>
+<body>
+    <h1>Man Page Generator</h1>
+    <label for="program-name">Program Name:</label>
+    <input type="text" id="program-name" placeholder="Enter the program name">
+
+    <label for="description">Description:</label>
+    <input type="text" id="description" placeholder="Enter a short description">
+
+    <h3>Options:</h3>
+    <div id="options-container">
+        <div class="option">
+            <input type="text" class="option-flag" placeholder="Option flag (e.g. -h)">
+            <input type="text" class="option-description" placeholder="Option description">
+        </div>
+    </div>
+    <button onclick="addOption()">Add Option</button>
+
+    <h3>Examples:</h3>
+    <div id="examples-container">
+        <div class="example">
+            <input type="text" class="example-command" placeholder="Example command">
+        </div>
+    </div>
+    <button onclick="addExample()">Add Example</button>
+
+    <button onclick="generateManPage()">Generate Man Page</button>
+    <button id="download-button" style="display: none;" onclick="downloadFile()">Download Man Page</button>
+
+    <h2>Generated Man Page:</h2>
+    <pre id="man-page-output"></pre>
+    
+    <h2>Command to Convert Man Page:</h2>
+    <pre id="conversion-command-output"></pre>
+
+    <script>
+        function addOption() {
+            const optionsContainer = document.getElementById('options-container');
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.innerHTML = `
+                <input type="text" class="option-flag" placeholder="Option flag (e.g. -h)">
+                <input type="text" class="option-description" placeholder="Option description">
+            `;
+            optionsContainer.appendChild(div);
+        }
+
+        function addExample() {
+            const examplesContainer = document.getElementById('examples-container');
+            const div = document.createElement('div');
+            div.className = 'example';
+            div.innerHTML = `
+                <input type="text" class="example-command" placeholder="Example command">
+            `;
+            examplesContainer.appendChild(div);
+        }
+
+        function generateManPage() {
+            const programName = document.getElementById('program-name').value;
+            const description = document.getElementById('description').value;
+
+            let optionsText = "";
+            const optionFlags = document.getElementsByClassName('option-flag');
+            const optionDescs = document.getElementsByClassName('option-description');
+
+            for (let i = 0; i < optionFlags.length; i++) {
+                if (optionFlags[i].value && optionDescs[i].value) {
+                    optionsText += `.B ${optionFlags[i].value}\n${optionDescs[i].value}\n`;
+                }
+            }
+
+            let examplesText = "";
+            const exampleCommands = document.getElementsByClassName('example-command');
+
+            for (let i = 0; i < exampleCommands.length; i++) {
+                if (exampleCommands[i].value) {
+                    examplesText += `.B ${exampleCommands[i].value}\n`;
+                }
+            }
+
+            const manPageContent = `
+.TH ${programName.toUpperCase()} 1 "Date" "Version" "${programName} manual"
+.SH NAME
+${programName} - ${description}
+.SH SYNOPSIS
+.B ${programName}
+[options]
+.SH DESCRIPTION
+${description}
+.SH OPTIONS
+${optionsText}
+.SH EXAMPLES
+${examplesText}`;
+
+            document.getElementById('man-page-output').textContent = manPageContent.trim();
+
+            // Command to convert the generated man page
+            const conversionCommand = `groff -Tascii -man ${programName}.1 > ${programName}.txt`;
+            document.getElementById('conversion-command-output').textContent = conversionCommand;
+
+            // Show download button
+            document.getElementById('download-button').style.display = 'inline-block';
+        }
+
+        function downloadFile() {
+            const programName = document.getElementById('program-name').value;
+            const manPageContent = document.getElementById('man-page-output').textContent;
+
+            const blob = new Blob([manPageContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${programName}.1`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url); // Cleanup
+        }
+    </script>
+</body>
+</html>
