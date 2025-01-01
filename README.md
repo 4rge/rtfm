@@ -1,7 +1,5 @@
 ## Webpage:
 
-# Man Page Generator
-
 A simple web application that enables users to generate manual (man) pages for command-line programs. This tool allows you to create customized man pages by inputting program details, options, and examples, and provides the ability to download the generated man page.
 
 ## Features
@@ -15,17 +13,11 @@ A simple web application that enables users to generate manual (man) pages for c
 
 See "Useage" at bottom of page.
 
-## Generated Output
-
 ### Man Page
 
 The generated man page will be displayed under the "Generated Man Page" section, formatted appropriately to follow the conventions of man pages.
 
-### Conversion Command
-
-## Python Script
-
-# Man Page Generator
+# Python Script
 
 A command-line application in Python that facilitates the creation of manual (man) pages for various command-line programs. This program allows users to input details such as the program name, description, options, and examples. It then generates a formatted man page and provides an option to view it.
 
@@ -53,7 +45,7 @@ cd <repository-directory>```
 
 See "Useage" at bottom of page.
 
-# Man Page Generator Script
+# BASH script
 
 A Bash script to generate manual (man) pages for command-line programs. This script allows users to define program details, including the program name, description, options, and examples. The output is a properly formatted man page that can be viewed in a terminal.
 
