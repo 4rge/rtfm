@@ -35,14 +35,6 @@ Before running this application, ensure you have the following installed:
 - Python 3
 - `groff` command-line tool for formatting man pages
 
-## Installation
-
-Clone the repository or download the script:
-
-```bash
-git clone <repository-url>
-cd <repository-directory>```
-
 See "Useage" at bottom of page.
 
 # BASH script
