@@ -13,6 +13,49 @@ A simple web application that enables users to generate manual (man) pages for c
 - Command for converting the generated man page for use.
 - Download option for the generated man page in `.1` format.
 
+See "Useage" at bottom of page.
+
+## Generated Output
+
+### Man Page
+
+The generated man page will be displayed under the "Generated Man Page" section, formatted appropriately to follow the conventions of man pages.
+
+### Conversion Command
+
+## Python Script
+
+# Man Page Generator
+
+A command-line application in Python that facilitates the creation of manual (man) pages for various command-line programs. This program allows users to input details such as the program name, description, options, and examples. It then generates a formatted man page and provides an option to view it.
+
+## Features
+
+- Interactive command-line interface using the `curses` library for an enhanced user experience.
+- Easily input program details, options, and examples.
+- Automatically generates a man page in the conventional format.
+- Uses `groff` to produce a formatted output for the man page.
+
+## Prerequisites
+
+Before running this application, ensure you have the following installed:
+
+- Python 3
+- `groff` command-line tool for formatting man pages
+
+## Installation
+
+Clone the repository or download the script:
+
+```bash
+git clone <repository-url>
+cd <repository-directory>```
+
+See "Useage" at bottom of page.
+
+
+
+
 ## Usage
 
 1. Open the Man Page Generator in your web browser.
@@ -24,16 +67,3 @@ A simple web application that enables users to generate manual (man) pages for c
 5. Click the **Generate Man Page** button to see the formatted man page based on the provided inputs.
 6. The command to convert the generated man page will be displayed along with the option to download it.
 7. Click the **Download Man Page** button to save the man page to your device.
-
-## Generated Output
-
-### Man Page
-
-The generated man page will be displayed under the "Generated Man Page" section, formatted appropriately to follow the conventions of man pages.
-
-### Conversion Command
-
-A command that can be used to convert the generated man page for further use:
-
-## Script:
-
