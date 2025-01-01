@@ -53,8 +53,22 @@ cd <repository-directory>```
 
 See "Useage" at bottom of page.
 
+# Man Page Generator Script
 
+A Bash script to generate manual (man) pages for command-line programs. This script allows users to define program details, including the program name, description, options, and examples. The output is a properly formatted man page that can be viewed in a terminal.
 
+## Features
+
+- User-friendly command line interface to gather input for man page creation.
+- Supports adding multiple options with brief descriptions.
+- Generates a man page file in `.1` format and a corresponding formatted output in `.txt` using `groff`.
+
+## Prerequisites
+
+Before running this script, ensure that you have:
+
+- A Unix-like environment (Linux, macOS, etc.)
+- `groff` installed to format the man page.
 
 ## Usage
 
