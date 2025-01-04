@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Man Page Generator</title>
+    <title>R.T.F.M.</title>
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
@@ -62,11 +62,21 @@
 </head>
 <body>
     <h1>Man Page Generator</h1>
+    
     <label for="program-name">Program Name:</label>
     <input type="text" id="program-name" placeholder="Enter the program name">
 
     <label for="description">Description:</label>
     <input type="text" id="description" placeholder="Enter a short description">
+    
+    <label for="version">Version:</label>
+    <input type="text" id="version" placeholder="Enter the version number">
+
+    <label for="date">Date:</label>
+    <input type="text" id="date" placeholder="YYYY-MM-DD (leave blank for today's date)">
+
+    <label for="exit-status">Exit Status:</label>
+    <textarea id="exit-status" placeholder="Enter the exit status description"></textarea>
 
     <h3>Options:</h3>
     <div id="options-container">
@@ -85,6 +95,16 @@
     </div>
     <button onclick="addExample()">Add Example</button>
 
+    <label>
+        <input type="checkbox" id="functionality-notes-checkbox"> Include Functionality Notes
+    </label>
+    <textarea id="functionality-notes" placeholder="Enter any functionality notes" style="display:none;"></textarea>
+
+    <label>
+        <input type="checkbox" id="see-also-checkbox"> Include 'See Also' References
+    </label>
+    <textarea id="see-also" placeholder="Enter 'see also' references" style="display:none;"></textarea>
+
     <button onclick="generateManPage()">Generate Man Page</button>
     <button id="download-button" style="display: none;" onclick="downloadFile()">Download Man Page</button>
 
@@ -95,6 +115,14 @@
     <pre id="conversion-command-output"></pre>
 
     <script>
+        document.getElementById('functionality-notes-checkbox').addEventListener('change', function() {
+            document.getElementById('functionality-notes').style.display = this.checked ? 'block' : 'none';
+        });
+
+        document.getElementById('see-also-checkbox').addEventListener('change', function() {
+            document.getElementById('see-also').style.display = this.checked ? 'block' : 'none';
+        });
+
         function addOption() {
             const optionsContainer = document.getElementById('options-container');
             const div = document.createElement('div');
@@ -119,6 +147,11 @@
         function generateManPage() {
             const programName = document.getElementById('program-name').value;
             const description = document.getElementById('description').value;
+            const version = document.getElementById('version').value;
+            const date = document.getElementById('date').value || new Date().toISOString().split('T')[0];
+            const exitStatus = document.getElementById('exit-status').value;
+            const functionalityNotes = document.getElementById('functionality-notes-checkbox').checked ? document.getElementById('functionality-notes').value : '';
+            const seeAlso = document.getElementById('see-also-checkbox').checked ? document.getElementById('see-also').value : '';
 
             let optionsText = "";
             const optionFlags = document.getElementsByClassName('option-flag');
@@ -139,8 +172,8 @@
                 }
             }
 
-            const manPageContent = `
-.TH ${programName.toUpperCase()} 1 "Date" "Version" "${programName} manual"
+            let manPageContent = `
+.TH ${programName.toUpperCase()} 1 "${date}" "${version}" "${programName} manual"
 .SH NAME
 ${programName} - ${description}
 .SH SYNOPSIS
@@ -148,12 +181,16 @@ ${programName} - ${description}
 [options]
 .SH DESCRIPTION
 ${description}
+${functionalityNotes ? `.SH FUNCTIONALITY NOTES\n${functionalityNotes}` : ''}
 .SH OPTIONS
 ${optionsText}
 .SH EXAMPLES
-${examplesText}`;
+${examplesText}
+${seeAlso ? `.SH SEE ALSO\n${seeAlso}` : ''}`;
 
-            document.getElementById('man-page-output').textContent = manPageContent.trim();
+            manPageContent = manPageContent.trim();
+
+            document.getElementById('man-page-output').textContent = manPageContent;
 
             // Command to convert the generated man page
             const conversionCommand = `groff -Tascii -man ${programName}.1 > ${programName}.txt`;
