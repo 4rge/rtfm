@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Function to create man page content
+# Function to create manpage content
 create_man_page() {
     local program_name="$1" description="$2" version="$3" date="$4" exit_status="$5" options=("${@:6}")
 
