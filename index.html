@@ -4,154 +4,189 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>R.T.F.M.</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #000000; /* Black background */
-            color: #c0c0c0; /* Light gray foreground color */
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #666666; /* Darker border for contrast */
-            border-radius: 5px;
-            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5); /* Slight shadow */
-        }
-        h1, h2, h3 {
-            color: #66ccff; /* Light blue color for headings */
-            margin-top: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input, textarea {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 8px;
-            font-family: inherit;
-            font-size: 14px;
-            border: 1px solid #666666; /* Matching border color */
-            border-radius: 3px;
-            background-color: #333333; /* Dark background for inputs */
-            color: #c0c0c0; /* Light gray text in inputs */
-        }
-        button {
-            padding: 10px 15px;
-            cursor: pointer;
-            background-color: #005f7f; /* Standard button color */
-            color: white;
-            border: none;
-            border-radius: 3px;
-            font-size: 14px; 
-        }
-        button:hover {
-            background-color: #004358; /* Darker on hover */
-        }
-        pre {
-            background-color: #1e1e1e; /* Darker gray background for code blocks */
-            padding: 10px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            max-height: 400px;
-            overflow-y: auto;
-            color: #c0c0c0; /* Light gray for preformatted text */
-        }
-        #conversion-command-output {
-            background-color: #1e1e1e; /* Darker background for command output */
-            font-weight: bold; /* Bold for emphasis */
-        }
+        body { font-family: 'Courier New', Courier, monospace; background-color: #121212; color: #c0c0c0; margin: 0; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        h1 { color: #66ccff; text-align: center; }
+        .input-row { display: flex; justify-content: space-between; gap: 10px; }
+        label { font-weight: bold; color: #66ccff; width: 150px; margin: 0; }
+        input, textarea { padding: 10px; font-family: inherit; font-size: 14px; border: 1px solid #666666; border-radius: 5px; background-color: #333333; color: #c0c0c0; }
+        #program-name { width: calc(100% - 150px - 10px); }
+        #description { width: calc(100% - 150px - 10px); height: 100px; }
+        #example-command { width: calc(100% - 50px); }
+        h2, h3 { color: #66ccff; margin-top: 20px; margin-bottom: 10px; }
+        pre { background-color: #1e1e1e; padding: 10px; white-space: pre-wrap; word-wrap: break-word; max-height: 400px; overflow-y: auto; color: #c0c0c0; border-radius: 5px; border: 1px solid #666666; }
+        .option-container { display: flex; align-items: center; margin-bottom: 10px; }
+        .option-flag, .option-description { margin-right: 10px; flex: 1; }
+        .remove-button { color: #ff4444; border: none; cursor: pointer; font-weight: bold; padding: 0 10px; background-color: #444444; border-radius: 5px; }
+        .options-summary { background-color: #222222; border: 1px solid #666666; border-radius: 5px; padding: 10px; max-width: 250px; max-height: 200px; overflow-y: auto; display: none; position: absolute; margin-top: 5px; }
+        .options-summary table { width: 100%; }
+        .options-summary td { padding: 5px; color: #c0c0c0; }
+        .toggle-button { background-color: #444444; color: #66ccff; border: 1px solid #666666; padding: 5px 7.5px; border-radius: 5px; cursor: pointer; }
+        .additional-input { display: none; }
     </style>
 </head>
 <body>
-    <h1>Man Page Generator</h1>
-    
-    <label for="program-name">Program Name:</label>
-    <input type="text" id="program-name" placeholder="Enter the program name">
+    <h1>R.T.F.M.</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <img src="https://www.bootstrapdash.com/demo/bootstrap-admin-template-light/assets/images/favicon.png" alt="Options" style="width: 30px; height: 30px;">
+        <button class="toggle-button" onclick="toggleOptionsMenu()">Toggle Options Menu</button>
+    </div>
+    <div class="options-summary" id="options-summary">
+        <h4>Options Settings</h4>
+        <table>
+            <tr>
+                <td><input type="checkbox" id="functionality-notes-checkbox" onchange="toggleTextarea('functionality-notes')"> Include Functionality Notes</td>
+            </tr>
+            <tr>
+                <td><input type="checkbox" id="see-also-checkbox" onchange="toggleTextarea('see-also')"> Include 'See Also' References</td>
+            </tr>
+        </table>
+    </div>
 
-    <label for="description">Description:</label>
-    <input type="text" id="description" placeholder="Enter a short description">
+    <div class="input-row">
+        <label for="program-name">Program Name:</label>
+        <input type="text" id="program-name" placeholder="Enter the program name" oninput="updateManPage()">
+    </div>
     
-    <label for="version">Version:</label>
-    <input type="text" id="version" placeholder="Enter the version number">
-
-    <label for="date">Date:</label>
-    <input type="text" id="date" placeholder="YYYY-MM-DD (leave blank for today's date)">
+    <div class="input-row">
+        <label for="description">Description:</label>
+        <textarea id="description" placeholder="Enter a short description" oninput="updateManPage()"></textarea>
+    </div>
+    
+    <div class="input-row">
+        <label for="version">Version:</label>
+        <input type="text" id="version" placeholder="Enter the version number" oninput="updateManPage()">
+        <label for="date">Date:</label>
+        <input type="text" id="date" placeholder="YYYY-MM-DD (leave blank for today's date)" oninput="updateManPage()">
+    </div>
 
     <label for="exit-status">Exit Status:</label>
-    <textarea id="exit-status" placeholder="Enter the exit status description"></textarea>
+    <textarea id="exit-status" placeholder="Enter the exit status description" rows="3" oninput="updateManPage()"></textarea>
 
     <h3>Options:</h3>
     <div id="options-container">
-        <div class="option">
-            <input type="text" class="option-flag" placeholder="Option flag (e.g. -h)">
-            <input type="text" class="option-description" placeholder="Option description">
+        <div class="option-container">
+            <input type="text" class="option-flag" placeholder="Option flag (e.g. -h)" onkeyup="handleOptionEnter(event, this)">
+            <input type="text" class="option-description" placeholder="Option description" onkeyup="handleOptionEnter(event, this)">
+            <button class="remove-button" onclick="addOption('', '')">✚</button>
         </div>
     </div>
-    <button onclick="addOption()">Add Option</button>
 
     <h3>Examples:</h3>
     <div id="examples-container">
         <div class="example">
-            <input type="text" class="example-command" placeholder="Example command">
+            <input type="text" id="example-command" class="example-command" placeholder="Example command" onkeyup="handleExampleEnter(event, this)">
+            <button class="remove-button" onclick="addExample('')">✚</button>
         </div>
     </div>
-    <button onclick="addExample()">Add Example</button>
 
-    <label>
-        <input type="checkbox" id="functionality-notes-checkbox"> Include Functionality Notes
-    </label>
-    <textarea id="functionality-notes" placeholder="Enter any functionality notes" style="display:none;"></textarea>
+    <!-- Functionality Notes Input -->
+    <div class="additional-input" id="functionality-notes-container">
+        <label for="functionality-notes">Functionality Notes:</label>
+        <textarea id="functionality-notes" placeholder="Enter functionality notes" rows="3" style="width: calc(100% - 150px - 10px);" oninput="updateManPage()"></textarea>
+    </div>
 
-    <label>
-        <input type="checkbox" id="see-also-checkbox"> Include 'See Also' References
-    </label>
-    <textarea id="see-also" placeholder="Enter 'see also' references" style="display:none;"></textarea>
+    <!-- See Also References Input -->
+    <div class="additional-input" id="see-also-container">
+        <label for="see-also">See Also References:</label>
+        <textarea id="see-also" placeholder="Enter 'See Also' references" rows="3" style="width: calc(100% - 150px - 10px);" oninput="updateManPage()"></textarea>
+    </div>
 
-    <button onclick="generateManPage()">Generate Man Page</button>
-    <button id="download-button" style="display: none;" onclick="downloadFile()">Download Man Page</button>
-
-    <h2>Generated Man Page:</h2>
-    <pre id="man-page-output"></pre>
-    
-    <h2>Command to Convert Man Page:</h2>
-    <pre id="conversion-command-output"></pre>
+    <!-- Moved Generated Man Page section to the bottom -->
+    <div id="manpage-widget">
+        <label>Generated Man Page:</label>
+        <pre id="conversion-command-output"></pre>
+        <pre id="man-page-output"></pre>
+        <button class="toggle-button" id="download-button" onclick="downloadManPage()">Download Man Page</button> 
+    </div>
 
     <script>
-        document.getElementById('functionality-notes-checkbox').addEventListener('change', function() {
-            document.getElementById('functionality-notes').style.display = this.checked ? 'block' : 'none';
-        });
-
-        document.getElementById('see-also-checkbox').addEventListener('change', function() {
-            document.getElementById('see-also').style.display = this.checked ? 'block' : 'none';
-        });
-
-        function addOption() {
-            const optionsContainer = document.getElementById('options-container');
-            const div = document.createElement('div');
-            div.className = 'option';
-            div.innerHTML = `
-                <input type="text" class="option-flag" placeholder="Option flag (e.g. -h)">
-                <input type="text" class="option-description" placeholder="Option description">
-            `;
-            optionsContainer.appendChild(div);
+        function toggleTextarea(textareaId) {
+            if (textareaId === 'functionality-notes') {
+                const container = document.getElementById('functionality-notes-container');
+                container.style.display = document.getElementById('functionality-notes-checkbox').checked ? 'block' : 'none';
+            } else if (textareaId === 'see-also') {
+                const container = document.getElementById('see-also-container');
+                container.style.display = document.getElementById('see-also-checkbox').checked ? 'block' : 'none';
+            }
+            updateManPage();
+        }
+        
+        function toggleOptionsMenu() {
+            const optionsMenu = document.getElementById('options-summary');
+            optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
         }
 
-        function addExample() {
+        function addOption(flag, description) {
+            const optionsContainer = document.getElementById('options-container');
+            const div = document.createElement('div');
+            div.className = 'option-container';
+            div.innerHTML = `
+                <input type="text" class="option-flag" value="${flag}" onkeyup="handleOptionEnter(event, this)">
+                <input type="text" class="option-description" value="${description}" onkeyup="handleOptionEnter(event, this)">
+                <button class="remove-button" onclick="removeOption(this)">✖</button>
+            `;
+            optionsContainer.appendChild(div);
+            updateManPage();
+        }
+
+                function addExample(command) {
             const examplesContainer = document.getElementById('examples-container');
             const div = document.createElement('div');
             div.className = 'example';
             div.innerHTML = `
-                <input type="text" class="example-command" placeholder="Example command">
+                <input type="text" class="example-command" value="${command}" onkeyup="handleExampleEnter(event, this)">
+                <button class="remove-button" onclick="removeExample(this)">✖</button>
             `;
             examplesContainer.appendChild(div);
+            updateManPage();
         }
 
-        function generateManPage() {
+        function handleOptionEnter(event, input) {
+            if (event.key === 'Enter') {
+                const optionFlag = input.parentElement.querySelector('.option-flag').value;
+                const optionDescription = input.parentElement.querySelector('.option-description').value;
+                if (optionFlag || optionDescription) {
+                    addOption(optionFlag, optionDescription);
+                    input.parentElement.querySelector('.option-flag').value = '';
+                    input.parentElement.querySelector('.option-description').value = '';
+                    updateManPage();
+                }
+            }
+        }
+
+        function handleExampleEnter(event, input) {
+            if (event.key === 'Enter') {
+                const exampleCommand = input.value;
+                if (exampleCommand) {
+                    addExample(exampleCommand);
+                    input.value = '';
+                }
+                updateManPage();
+            }
+        }
+
+        function removeOption(button) {
+            button.parentElement.remove();
+            updateManPage();
+        }
+
+        function removeExample(button) {
+            button.parentElement.remove();
+            updateManPage();
+        }
+
+        function updateManPage() {
             const programName = document.getElementById('program-name').value;
             const description = document.getElementById('description').value;
             const version = document.getElementById('version').value;
             const date = document.getElementById('date').value || new Date().toISOString().split('T')[0];
             const exitStatus = document.getElementById('exit-status').value;
-            const functionalityNotes = document.getElementById('functionality-notes-checkbox').checked ? document.getElementById('functionality-notes').value : '';
-            const seeAlso = document.getElementById('see-also-checkbox').checked ? document.getElementById('see-also').value : '';
+            const functionalityNotes = document.getElementById('functionality-notes-checkbox').checked 
+                ? document.getElementById('functionality-notes').value : '';
+            const seeAlso = document.getElementById('see-also-checkbox').checked 
+                ? document.getElementById('see-also').value : '';
 
             let optionsText = "";
             const optionFlags = document.getElementsByClassName('option-flag');
@@ -189,21 +224,15 @@ ${examplesText}
 ${seeAlso ? `.SH SEE ALSO\n${seeAlso}` : ''}`;
 
             manPageContent = manPageContent.trim();
-
             document.getElementById('man-page-output').textContent = manPageContent;
 
-            // Command to convert the generated man page
             const conversionCommand = `groff -Tascii -man ${programName}.1 > ${programName}.txt`;
             document.getElementById('conversion-command-output').textContent = conversionCommand;
-
-            // Show download button
-            document.getElementById('download-button').style.display = 'inline-block';
         }
 
-        function downloadFile() {
+        function downloadManPage() {
             const programName = document.getElementById('program-name').value;
             const manPageContent = document.getElementById('man-page-output').textContent;
-
             const blob = new Blob([manPageContent], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -212,7 +241,7 @@ ${seeAlso ? `.SH SEE ALSO\n${seeAlso}` : ''}`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(url); // Cleanup
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
