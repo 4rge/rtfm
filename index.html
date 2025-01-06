@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css?v=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unified README & R.T.F.M. Generator</title>
+    <title>R.T.F.M.: README & Man Page Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -20,9 +21,11 @@
             flex-direction: column;
             align-items: center;
         }
+
         h1 {
             color: #fff;
         }
+
         .toggle-button {
             align-self: flex-start;
             padding: 10px 20px;
@@ -33,13 +36,18 @@
             color: white;
             cursor: pointer;
         }
+
         .toggle-button:hover {
             background-color: #0056b3;
         }
+
         label {
             font-weight: bold;
         }
-        textarea, input, select {
+
+        textarea,
+        input,
+        select {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
@@ -48,6 +56,7 @@
             background-color: #222;
             color: #e0e0e0;
         }
+
         button {
             margin-top: 10px;
             padding: 10px 20px;
@@ -57,9 +66,11 @@
             color: white;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
+
         pre {
             background-color: #1e1e1e;
             padding: 10px;
@@ -71,29 +82,36 @@
             margin-bottom: 20px;
             width: 100%;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             text-align: left;
             border: 1px solid #444;
             padding: 10px;
             background-color: #222;
         }
+
         th {
             color: #fff;
         }
+
         .hidden {
             display: none;
         }
+
         .tooltip {
             position: relative;
             display: inline-block;
             border: none;
             background-color: transparent;
         }
+
         .tooltip .tooltiptext {
             visibility: hidden;
             width: 120px;
@@ -104,21 +122,25 @@
             padding: 5px 0;
             position: absolute;
             z-index: 1;
-            bottom: 125%; /* Position the tooltip above the text */
+            bottom: 125%;
+            /* Position the tooltip above the text */
             left: 50%;
-            margin-left: -60px; /* Centers the tooltip */
+            margin-left: -60px;
+            /* Centers the tooltip */
             transition: opacity 0.3s;
         }
+
         .tooltip:hover .tooltiptext {
             visibility: visible;
             opacity: 1;
         }
     </style>
 </head>
+
 <body>
 
-<h1>Unified Generator</h1>
-<button class="toggle-button" id="toggle-button" onclick="toggleSections()">Switch to R.T.F.M.</button>
+<h1>R.T.F.M.</h1>
+<button class="toggle-button" id="toggle-button" onclick="toggleSections()">Switch to Man Page</button>
 
 <!-- README Generator Section -->
 <div id="readme-section" class="section">
@@ -130,10 +152,10 @@
         </tr>
         <tr>
             <td class="tooltip">
-                Project Title:
+                Program Name:
                 <span class="tooltiptext">Enter the title of the project.</span>
             </td>
-            <td><input type="text" id="project-title" value="Your Project Title"></td>
+            <td><input type="text" id="project-title" value="Program Name"></td>
             <td><input type="checkbox" id="include-project-title" checked></td>
         </tr>
         <tr>
@@ -211,7 +233,7 @@
                 Program Name:
                 <span class="tooltiptext">Enter the name of the program.</span>
             </td>
-            <td><input type="text" id="program-name" value="your_program"></td>
+            <td><input type="text" id="program-name" value="Program Name"></td>
             <td><input type="checkbox" id="include-program-name" checked></td>
         </tr>
         <tr>
@@ -226,8 +248,9 @@
             <td class="tooltip" style="width: 20%;">
                 Version:
                 <span class="tooltiptext">Enter the version number of the program.</span>
+                       <td>
+                <input type="text" id="version" placeholder="1.0.0">
             </td>
-            <td><input type="text" id="version" placeholder="1.0.0"></td>
             <td><input type="checkbox" id="include-version" checked></td>
         </tr>
         <tr>
@@ -288,6 +311,23 @@
             toggleButton.textContent = 'Switch to README';
         }
     }
+
+    // Synchronizing fields between README and R.T.F.M. sections
+    document.getElementById('project-title').addEventListener('input', function() {
+        document.getElementById('program-name').value = this.value;
+    });
+
+    document.getElementById('description').addEventListener('input', function() {
+        document.getElementById('description-r').value = this.value;
+    });
+
+    document.getElementById('program-name').addEventListener('input', function() {
+        document.getElementById('project-title').value = this.value;
+    });
+
+    document.getElementById('description-r').addEventListener('input', function() {
+        document.getElementById('description').value = this.value;
+    });
 
     function generateReadme() {
         const title = document.getElementById('project-title').value;
