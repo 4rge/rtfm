@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css?v=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>R.T.F.M.</title>
+    <title>Unified README & R.T.F.M. Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -21,6 +22,19 @@
         }
         h1 {
             color: #fff;
+        }
+        .toggle-button {
+            align-self: flex-start;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .toggle-button:hover {
+            background-color: #0056b3;
         }
         label {
             font-weight: bold;
@@ -71,94 +85,255 @@
         th {
             color: #fff;
         }
+        .hidden {
+            display: none;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border: none;
+            background-color: transparent;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -60px; /* Centers the tooltip */
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
 
-<h1>R.T.F.M.</h1>
+<h1>Unified Generator</h1>
+<button class="toggle-button" id="toggle-button" onclick="toggleSections()">Switch to R.T.F.M.</button>
 
-<table>
-    <tr>
-        <th style="width: 20%;">Field</th> <!-- Set width to 20% for the Field column -->
-        <th>Input</th>
-        <th>Include?</th>
-    </tr>
-    <tr>
-        <td class="tooltip" style="width: 20%;">
-            Program Name:
-            <span class="tooltiptext">Enter the name of the program.</span>
-        </td>
-        <td><input type="text" id="program-name" value="your_program"></td>
-        <td><input type="checkbox" id="include-program-name" checked></td>
-    </tr>
-    <tr>
-        <td class="tooltip" style="width: 20%;">
-            Description:
-            <span class="tooltiptext">Short description of the program.</span>
-        </td>
-        <td><textarea id="description" rows="2" placeholder="Short description of the program."></textarea></td>
-        <td><input type="checkbox" id="include-description" checked></td>
-    </tr>
-    <tr>
-        <td class="tooltip" style="width: 20%;">
-            Version:
-            <span class="tooltiptext">Enter the version number of the program.</span>
-        </td>
-        <td><input type="text" id="version" placeholder="1.0.0"></td>
-        <td><input type="checkbox" id="include-version" checked></td>
-    </tr>
-    <tr>
-        <td class="tooltip" style="width: 20%;">
-            Exit Status:
-            <span class="tooltiptext">Description of the exit status of the program.</span>
-        </td>
-        <td><textarea id="exit-status" rows="2" placeholder="Description of exit status."></textarea></td>
-        <td><input type="checkbox" id="include-exit-status" checked></td>
-    </tr>
-    <tr>
-        <td class="tooltip" style="width: 20%;">
-            Options:
-            <span class="tooltiptext">Format: -o|Description|Type|Default</span>
-        </td>
-        <td><textarea id="options" rows="4" placeholder="-o|Output file|string|output.txt"></textarea></td>
-        <td><input type="checkbox" id="include-options" checked></td>
-    </tr>
-    <tr>
-        <td class="tooltip" style="width: 20%;">
-            Date:
-            <span class="tooltiptext">The date for the man page.</span>
-        </td>
-        <td><input type="text" id="date" value="" placeholder="YYYY-MM-DD" readonly></td>
-        <td><input type="checkbox" id="include-date" checked></td>
-    </tr>
-</table>
+<!-- README Generator Section -->
+<div id="readme-section" class="section">
+    <table>
+        <tr>
+            <th style="width: 20%;">Field</th>
+            <th>Input</th>
+            <th>Include?</th>
+        </tr>
+        <tr>
+            <td class="tooltip">
+                Project Title:
+                <span class="tooltiptext">Enter the title of the project.</span>
+            </td>
+            <td><input type="text" id="project-title" value="Your Project Title"></td>
+            <td><input type="checkbox" id="include-project-title" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip">
+                Description:
+                <span class="tooltiptext">Briefly describe the project.</span>
+            </td>
+            <td><textarea id="description" rows="2" placeholder="Enter a brief description of your project, highlighting its purpose and functionalities."></textarea></td>
+            <td><input type="checkbox" id="include-description" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip">
+                Installation Instructions:
+                <span class="tooltiptext">Explain how to install the project.</span>
+            </td>
+            <td><textarea id="installation" rows="2" placeholder="To install this project, clone the repository and run the following command: npm install"></textarea></td>
+            <td><input type="checkbox" id="include-installation" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip">
+                Usage Information:
+                <span class="tooltiptext">Provide usage examples.</span>
+            </td>
+            <td><textarea id="usage" rows="2" placeholder="To use this project, execute the following command: node index.js"></textarea></td>
+            <td><input type="checkbox" id="include-usage" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip">
+                Support and Contributions:
+                <span class="tooltiptext">State how others can contribute.</span>
+            </td>
+            <td><textarea id="contribution" rows="2" placeholder="For any issues or feature requests, please feel free to open an issue or submit a pull request."></textarea></td>
+            <td><input type="checkbox" id="include-contribution" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip">
+                License:
+                <span class="tooltiptext">Describe the licensing terms.</span>
+            </td>
+            <td>
+                <select id="license">
+                    <option value="">Select a License</option>
+                    <option value="MIT">MIT</option>
+                    <option value="Apache 2.0">Apache 2.0</option>
+                    <option value="GPL 3.0">GPL 3.0</option>
+                    <option value="BSD 2-Clause">BSD 2-Clause</option>
+                    <option value="BSD 3-Clause">BSD 3-Clause</option>
+                    <option value="No License">No License (Ensure to clarify license terms)</option>
+                </select>
+            </td>
+            <td><input type="checkbox" id="include-license" checked></td>
+        </tr>
+    </table>
 
-<h2>Generated Man Page:</h2>
-<pre id="output"></pre>
+    <h2>Generated README.md:</h2>
+    <pre id="output-readme"></pre>
 
-<div style="display: flex; justify-content: space-around; width: 100%;">
-    <button onclick="generateManPage()">Generate Man Page</button>
-    <button onclick="copyToClipboard()">Copy to Clipboard</button>
-    <button onclick="downloadManPage()">Download Man Page</button>
+    <div style="display: flex; justify-content: space-around; width: 100%;">
+        <button onclick="generateReadme()">Generate README.md</button>
+        <button onclick="copyToClipboard('output-readme')">Copy to Clipboard</button>
+        <button onclick="downloadReadme()">Download README.md</button>
+    </div>
 </div>
 
-<p style="margin-top: 20px;">To convert the generated man page to a formatted output, use the following command:</p>
-<pre>groff -Tascii -man &lt;your_program.1&gt; &gt; &lt;output_file.txt&gt;</pre>
+<!-- R.T.F.M. Section -->
+<div id="rtfm-section" class="section hidden">
+    <table>
+        <tr>
+            <th style="width: 20%;">Field</th>
+            <th>Input</th>
+            <th>Include?</th>
+        </tr>
+        <tr>
+            <td class="tooltip" style="width: 20%;">
+                Program Name:
+                <span class="tooltiptext">Enter the name of the program.</span>
+            </td>
+            <td><input type="text" id="program-name" value="your_program"></td>
+            <td><input type="checkbox" id="include-program-name" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip" style="width: 20%;">
+                Description:
+                <span class="tooltiptext">Short description of the program.</span>
+            </td>
+            <td><textarea id="description-r" rows="2" placeholder="Short description of the program."></textarea></td>
+            <td><input type="checkbox" id="include-description-r" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip" style="width: 20%;">
+                Version:
+                <span class="tooltiptext">Enter the version number of the program.</span>
+            </td>
+            <td><input type="text" id="version" placeholder="1.0.0"></td>
+            <td><input type="checkbox" id="include-version" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip" style="width: 20%;">
+                Exit Status:
+                <span class="tooltiptext">Description of the exit status of the program.</span>
+            </td>
+            <td><textarea id="exit-status" rows="2" placeholder="Description of exit status."></textarea></td>
+            <td><input type="checkbox" id="include-exit-status" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip" style="width: 20%;">
+                Options:
+                <span class="tooltiptext">Format: -o|Description|Type|Default</span>
+            </td>
+            <td><textarea id="options" rows="4" placeholder="-o|Output file|string|output.txt"></textarea></td>
+            <td><input type="checkbox" id="include-options" checked></td>
+        </tr>
+        <tr>
+            <td class="tooltip" style="width: 20%;">
+                Date:
+                <span class="tooltiptext">The date for the man page.</span>
+            </td>
+            <td><input type="text" id="date" value="" placeholder="YYYY-MM-DD" readonly></td>
+            <td><input type="checkbox" id="include-date" checked></td>
+        </tr>
+    </table>
+
+    <h2>Generated Man Page:</h2>
+    <pre id="output-rtfm"></pre>
+
+    <div style="display: flex; justify-content: space-around; width: 100%;">
+        <button onclick="generateManPage()">Generate Man Page</button>
+        <button onclick="copyToClipboard('output-rtfm')">Copy to Clipboard</button>
+        <button onclick="downloadManPage()">Download Man Page</button>
+    </div>
+
+    <p style="margin-top: 20px;">To convert the generated man page to a formatted output, use the following command:</p>
+    <pre>groff -Tascii -man &lt;your_program.1&gt; &gt; &lt;output_file.txt&gt;</pre>
+</div>
 
 <script>
-    // Set the current date
+    // Set the current date when the page is loaded
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
+
+    function toggleSections() {
+        const readmeSection = document.getElementById('readme-section');
+        const rtfmSection = document.getElementById('rtfm-section');
+        const toggleButton = document.getElementById('toggle-button');
+
+        if (readmeSection.classList.contains('hidden')) {
+            readmeSection.classList.remove('hidden');
+            rtfmSection.classList.add('hidden');
+            toggleButton.textContent = 'Switch to R.T.F.M.';
+        } else {
+            readmeSection.classList.add('hidden');
+            rtfmSection.classList.remove('hidden');
+            toggleButton.textContent = 'Switch to README';
+        }
+    }
+
+    function generateReadme() {
+        const title = document.getElementById('project-title').value;
+        const description = document.getElementById('description').value;
+        const installation = document.getElementById('installation').value;
+        const usage = document.getElementById('usage').value;
+        const contribution = document.getElementById('contribution').value;
+        const license = document.getElementById('license').value;
+
+        const includeDescription = document.getElementById('include-description').checked;
+        const includeInstallation = document.getElementById('include-installation').checked;
+        const includeUsage = document.getElementById('include-usage').checked;
+        const includeContribution = document.getElementById('include-contribution').checked;
+        const includeLicense = document.getElementById('include-license').checked;
+
+        let readmeContent = `# ${title}\n\n`; // Add the main title at the beginning
+
+        if (includeDescription) {
+            readmeContent += `## Description\n${description}\n\n`;
+        }
+        if (includeInstallation) {
+            readmeContent += `## Installation\n${installation}\n\n`;
+        }
+        if (includeUsage) {
+            readmeContent += `## Usage\n${usage}\n\n`;
+        }
+        if (includeContribution) {
+            readmeContent += `## Support and Contributions\n${contribution}\n\n`;
+        }
+        if (includeLicense) {
+            readmeContent += `## License\n${license}\n`;
+        }
+
+        document.getElementById('output-readme').innerText = readmeContent.trim();
+    }
 
     function generateManPage() {
         let manPageContent = '';
-        
+
         if (document.getElementById('include-program-name').checked) {
             const programName = document.getElementById('program-name').value;
             manPageContent += `.TH ${programName.toUpperCase()} 1 "${document.getElementById('date').value}" "${document.getElementById('version').value}" "${programName} manual"\n`;
         }
-        
-        if (document.getElementById('include-description').checked) {
-            const description = document.getElementById('description').value;
+
+        if (document.getElementById('include-description-r').checked) {
+            const description = document.getElementById('description-r').value;
             manPageContent += `.SH NAME\n${document.getElementById('program-name').value} - ${description}\n`;
         }
 
@@ -166,8 +341,8 @@
             manPageContent += `.SH SYNOPSIS\n.B ${document.getElementById('program-name').value}\n`;
         }
 
-        if (document.getElementById('include-description').checked) {
-            manPageContent += '.SH DESCRIPTION\n' + (document.getElementById('description').value || '') + '\n';
+        if (document.getElementById('include-description-r').checked) {
+            manPageContent += '.SH DESCRIPTION\n' + (document.getElementById('description-r').value || '') + '\n';
         }
 
         if (document.getElementById('include-exit-status').checked) {
@@ -189,16 +364,16 @@
                 });
             }
         }
-        
+
         if (document.getElementById('include-date').checked) {
             manPageContent += `.SH DATE\n${document.getElementById('date').value}\n`;
         }
 
-        document.getElementById('output').innerText = manPageContent.trim();
+        document.getElementById('output-rtfm').innerText = manPageContent.trim();
     }
-    
-    function copyToClipboard() {
-        const output = document.getElementById('output');
+
+    function copyToClipboard(outputId) {
+        const output = document.getElementById(outputId);
         const textarea = document.createElement('textarea');
         textarea.value = output.innerText;
         document.body.appendChild(textarea);
@@ -208,8 +383,21 @@
         alert('Copied to clipboard!');
     }
 
+    function downloadReadme() {
+        const output = document.getElementById('output-readme').innerText;
+        const blob = new Blob([output], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'README.md';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
     function downloadManPage() {
-        const output = document.getElementById('output').innerText;
+        const output = document.getElementById('output-rtfm').innerText;
         const blob = new Blob([output], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
