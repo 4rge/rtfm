@@ -6,24 +6,139 @@
     <title>R.T.F.M.</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body { font-family: 'Courier New', Courier, monospace; background-color: #121212; color: #c0c0c0; margin: 0; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-        h1 { color: #66ccff; text-align: center; }
-        .input-row { display: flex; justify-content: space-between; gap: 10px; }
-        label { font-weight: bold; color: #66ccff; width: 150px; margin: 0; }
-        input, textarea { padding: 10px; font-family: inherit; font-size: 14px; border: 1px solid #666666; border-radius: 5px; background-color: #333333; color: #c0c0c0; }
-        #program-name { width: calc(100% - 150px - 10px); }
-        #description { width: calc(100% - 150px - 10px); height: 100px; }
-        #example-command { width: calc(100% - 50px); }
-        h2, h3 { color: #66ccff; margin-top: 20px; margin-bottom: 10px; }
-        pre { background-color: #1e1e1e; padding: 10px; white-space: pre-wrap; word-wrap: break-word; max-height: 400px; overflow-y: auto; color: #c0c0c0; border-radius: 5px; border: 1px solid #666666; }
-        .option-container { display: flex; align-items: center; margin-bottom: 10px; }
-        .option-flag, .option-description { margin-right: 10px; flex: 1; }
-        .remove-button { color: #ff4444; border: none; cursor: pointer; font-weight: bold; padding: 0 10px; background-color: #444444; border-radius: 5px; }
-        .options-summary { background-color: #222222; border: 1px solid #666666; border-radius: 5px; padding: 10px; max-width: 250px; max-height: 200px; overflow-y: auto; display: none; position: absolute; margin-top: 5px; }
-        .options-summary table { width: 100%; }
-        .options-summary td { padding: 5px; color: #c0c0c0; }
-        .toggle-button { background-color: #444444; color: #66ccff; border: 1px solid #666666; padding: 5px 7.5px; border-radius: 5px; cursor: pointer; }
-        .additional-input { display: none; }
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        h1 {
+            color: #e0e0e0;
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+        input, textarea {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #444444;
+            border-radius: 5px;
+            background-color: #333333;
+            color: #c0c0c0;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus {
+            border-color: #e0e0e0;
+            outline: none;
+        }
+        #program-name {
+            width: calc(100% - 150px - 10px);
+        }
+        #description {
+           width: calc(100% - 150px - 10px);
+           font-size: 16px; /* Change this value to adjust font size */
+           border-color: #0088cc; /* Change border color */
+           padding: 5px
+        }
+        #functionality-notes {
+           width: calc(100% - 150px - 10px); /* Ensures it takes a majority of the width */
+           height: 120px; /* Change this value to adjust the height */
+           padding: 10px; /* Additional padding for aesthetics */
+           font-size: 14px; /* Font size */
+        }
+        #see-also {
+           width: calc(100% - 150px - 10px); /* Same width adjustment */
+           height: 120px; /* Change this value to adjust the height */
+           padding: 10px; /* Additional padding for consistent look */
+           font-size: 14px; /* Font size */
+        }
+        .remove-button {
+           color: #ff4444;
+           border: none;
+           cursor: pointer;
+           font-weight: bold;
+           padding: 0 10px;
+           margin-left: 15px; /* Add left margin to add spacing */
+           background-color: #444444;
+           border-radius: 5px;
+           transition: background-color 0.3s;
+        }
+        .remove-button:hover {
+            background-color: #ff4444;
+        }
+        .options-summary {
+            background-color: #222222;
+            border: 1px solid #444444;
+            border-radius: 5px;
+            padding: 10px;
+            max-width: 250px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            position: absolute;
+        }
+        .toggle-button {
+            background-color: #444444;
+            color: #66ccff;
+            border: 1px solid #666666;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .toggle-button:hover {
+            background-color: #666666;
+        }
+        pre {
+            background-color: #1e1e1e;
+            padding: 10px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            color: #c0c0c0;
+            border-radius: 5px;
+            border: 1px solid #444444;
+        }
+        .example-command {
+            width: calc(100% - 60px);
+        }
+        .option-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .option-flag, .option-description {
+        /* Add or adjust height value as needed */
+            height: 40px; /* Example height */
+            padding: 10px; /* Padding to increase the clickable area */
+            font-size: 14px; /* Ensure the font size matches your UI design */
+            border-radius: 5px; /* Keep rounded corners */
+            border: 1px solid #444444; /* Consistent border */
+            background-color: #333333; /* Background color */
+            color: #c0c0c0; /* Text color */
+            transition: border-color 0.3s; /* Transition for focus effect */
+        }
+        .option-flag:focus, .option-description:focus {
+            border-color: #66ccff; /* Change border color on focus */
+            outline: none; /* Remove default outline */
+        }
+        .option-description {
+            width: calc(80% - 65px);
+            padding: 10px
+        }
+        input[type="text"], input[type="checkbox"] {
+            margin-bottom: 10px;
+        }
+        .additional-input {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -43,26 +158,28 @@
             </tr>
         </table>
     </div>
-
+        <script>
+            window.onload = function () {
+                document.getElementById("functionality-notes-checkbox").checked = false; // Ensure it's unchecked
+                document.getElementById("see-also-checkbox").checked = false; // Ensure it's unchecked
+         };
+        </script>
     <div class="input-row">
         <label for="program-name">Program Name:</label>
         <input type="text" id="program-name" placeholder="Enter the program name" oninput="updateManPage()">
     </div>
-    
     <div class="input-row">
         <label for="description">Description:</label>
         <textarea id="description" placeholder="Enter a short description" oninput="updateManPage()"></textarea>
     </div>
-    
     <div class="input-row">
         <label for="version">Version:</label>
         <input type="text" id="version" placeholder="Enter the version number" oninput="updateManPage()">
         <label for="date">Date:</label>
         <input type="text" id="date" placeholder="YYYY-MM-DD (leave blank for today's date)" oninput="updateManPage()">
     </div>
-
     <label for="exit-status">Exit Status:</label>
-    <textarea id="exit-status" placeholder="Enter the exit status description" rows="3" oninput="updateManPage()"></textarea>
+    <textarea id="exit-status" placeholder="Enter the exit status description" rows="1" oninput="updateManPage()"></textarea>
 
     <h3>Options:</h3>
     <div id="options-container">
@@ -80,20 +197,17 @@
             <button class="remove-button" onclick="addExample('')">✚</button>
         </div>
     </div>
-
-    <!-- Functionality Notes Input -->
+    
     <div class="additional-input" id="functionality-notes-container">
         <label for="functionality-notes">Functionality Notes:</label>
-        <textarea id="functionality-notes" placeholder="Enter functionality notes" rows="3" style="width: calc(100% - 150px - 10px);" oninput="updateManPage()"></textarea>
+        <textarea id="functionality-notes" placeholder="Enter functionality notes" rows="1" oninput="updateManPage()"></textarea>
     </div>
 
-    <!-- See Also References Input -->
     <div class="additional-input" id="see-also-container">
         <label for="see-also">See Also References:</label>
-        <textarea id="see-also" placeholder="Enter 'See Also' references" rows="3" style="width: calc(100% - 150px - 10px);" oninput="updateManPage()"></textarea>
+        <textarea id="see-also" placeholder="Enter 'See Also' references" rows="1" oninput="updateManPage()"></textarea>
     </div>
 
-    <!-- Moved Generated Man Page section to the bottom -->
     <div id="manpage-widget">
         <label>Generated Man Page:</label>
         <pre id="conversion-command-output"></pre>
@@ -103,13 +217,8 @@
 
     <script>
         function toggleTextarea(textareaId) {
-            if (textareaId === 'functionality-notes') {
-                const container = document.getElementById('functionality-notes-container');
-                container.style.display = document.getElementById('functionality-notes-checkbox').checked ? 'block' : 'none';
-            } else if (textareaId === 'see-also') {
-                const container = document.getElementById('see-also-container');
-                container.style.display = document.getElementById('see-also-checkbox').checked ? 'block' : 'none';
-            }
+            const container = document.getElementById(textareaId + '-container');
+            container.style.display = document.getElementById(textareaId + '-checkbox').checked ? 'block' : 'none';
             updateManPage();
         }
         
@@ -131,7 +240,7 @@
             updateManPage();
         }
 
-                function addExample(command) {
+        function addExample(command) {
             const examplesContainer = document.getElementById('examples-container');
             const div = document.createElement('div');
             div.className = 'example';
